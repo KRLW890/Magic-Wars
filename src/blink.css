@@ -1,0 +1,77 @@
+.focus {
+	-webkit-animation: focus 1s linear infinite;
+	-moz-animation: focus 1s linear infinite;
+	-ms-animation: focus 1s linear infinite;
+	-o-animation: focus 1s linear infinite;
+	 animation: focus 1s linear infinite;
+}
+@-webkit-keyframes focus {
+	0% { border: 3px solid black; }
+	50% { border: 3px solid black; }
+	50.01% { border: 0px solid black; }
+	100% { border: 0px solid black; }
+}
+@-moz-keyframes focus {
+	0% { border: 3px solid black; }
+	50% { border: 3px solid black; }
+	50.01% { border: 0px solid black; }
+	100% { border: 0px solid black; }
+}
+@-ms-keyframes focus {
+	0% { border: 3px solid black; }
+	50% { border: 3px solid black; }
+	50.01% { border: 0px solid black; }
+	100% { border: 0px solid black; }
+}
+@-o-keyframes focus {
+	0% { border: 3px solid black; }
+	50% { border: 3px solid black; }
+	50.01% { border: 0px solid black; }
+	100% { border: 0px solid black; }
+}
+@keyframes focus {
+	0% { border: 3px solid black; }
+	50% { border: 3px solid black; }
+	50.01% { border: 0px solid black; }
+	100% { border: 0px solid black; }
+}
+
+
+
+.blink {
+	-webkit-animation: blink 1s linear infinite;
+	-moz-animation: blink 1s linear infinite;
+	-ms-animation: blink 1s linear infinite;
+	-o-animation: blink 1s linear infinite;
+	 animation: blink 1s linear infinite;
+}
+@-webkit-keyframes blink {
+	0% { color: red; }
+	50% { color: red; }
+	50.01% { color: black; }
+	100% { color: black; }
+}
+@-moz-keyframes blink {
+	0% { color: red; }
+	50% { color: red; }
+	50.01% { color: black; }
+	100% { color: black; }
+}
+@-ms-keyframes blink {
+	0% { color: red; }
+	50% { color: red; }
+	50.01% { color: black; }
+	100% { color: black; }
+}
+@-o-keyframes blink {
+	0% { color: red; }
+	50% { color: red; }
+	50.01% { color: black; }
+	100% { color: black; }
+}
+@keyframes blink {
+	0% { color: red; }
+	50% { color: red; }
+	50.01% { color: black; }
+	100% { color: black; }
+}

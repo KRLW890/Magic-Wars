@@ -1,0 +1,55 @@
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    padding-left: 256px;
+    padding-right: 256px;
+}
+
+#links {
+    font-size: 0.8em;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#infocard {
+    background: rgb(200, 200, 200);
+    padding: 10px;
+    border-radius: 10px;
+    width: 800px;
+    margin: auto;
+}
+
+#textbox {
+    margin-left: 20px;
+}
+
+#suggestions {
+    margin-left: 20px;
+    margin-right: 30px;
+    height: 305px;
+    overflow: auto;
+}
+
+.suggestion {
+    margin: 0px;
+    padding: 5px;
+}
+.suggestion:hover {
+    cursor: pointer;
+    background: rgb(200, 200, 200);
+}
+
+td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#spellname {
+    font-size: 1.5em;
+    width: 700px;
+}
+
+#description {
+    background: rgb(215, 255, 255);
+    width: 500px;
+}
+

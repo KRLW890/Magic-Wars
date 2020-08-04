@@ -1,0 +1,78 @@
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#links {
+    font-size: 0.8em;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+table {
+    margin: auto;
+    vertical-align: top;
+}
+
+h3 {
+    margin: 10px;
+}
+
+.addspell {
+    width: 110px;
+    height: 55px;
+}
+
+.spellset-button {
+    height: 100px;
+    width: 150px;
+    border-radius: 5px;
+    margin: 5px;
+    font-size: 1.2em;
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+}
+.spellset-button:hover {
+    cursor: pointer;
+    background: rgb(230, 230, 230);
+}
+
+.selected {
+    font-weight: bold;
+    border: 5px outset black;
+}
+
+#customizer-main {
+    text-align: center;
+    background: rgb(200, 200, 200);
+    padding: 10px;
+    border-radius: 10px;
+    width: 800px;
+    margin: auto;
+}
+
+#spellset-display {
+    margin-left: 200px;
+}
+
+.spacer {
+    width: 50px;
+}
+
+#composites {
+    height: 100px;
+    overflow: auto;
+    background: rgb(215, 255, 255);
+}
+
+#spell0, #spell1, #spell2, #spell3, #spell4, #spell5 {
+    padding: 15px;
+    font-size: 1.2em;
+}
+#spell0:hover, #spell1:hover, #spell2:hover, #spell3:hover, #spell4:hover, #spell5:hover {
+    color: rgb(255, 0, 0);
+    cursor: pointer;
+}
+
+

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Magic Wars Spell List</title>
+  <link rel="stylesheet" href="spell-guide/style.css">
+  <script src="spell-guide/tree.js"></script>
+  <script src="spell-guide/Spell.js"></script>
+  <script src="src/Stats.js"></script>
+  <script src="src/spell-list.js"></script>
+  <script src="spell-guide/extra-spell-info.js"></script>
+</head>
+<body>
+<div id="links"><a href="index.html">Play Magic Wars</a> | <a href="spellset-customizer.html">Customize your spellset</a> | <a href="https://discord.gg/7cbm2Ma" target="_blank">Join our Discord</a> | Magic Wars Alpha v1.0.0</div>
+<div id="infocard">
+<table>
+ <tr>
+  <td id="spellname" colspan="2">Spell List</td>
+ </tr>
+ <tr>
+  <td>Stat multipliers:<br>
+   <table>
+    <tr>
+     <td id="stats0">Atk:</td>
+     <td id="stats1">Skl:</td>
+    </tr>
+    <tr>
+     <td id="stats2">Def:</td>
+     <td id="stats3">Strd:</td>
+    </tr>
+   </table>
+  </td>
+  <td id="description" rowspan="2">Type a spell in to see information on it.</td>
+ </tr>
+ <tr>
+  <td id="endur">Endurance cost:</td>
+ </tr>
+ <tr>
+  <td id="turn-count">Lasts ? turns.</td>
+  <td id="composite-type"></td>
+ </tr>
+ <tr>
+  <td id="stackable">Not stackable.</td>
+  <td id="components" colspan="2"></td>
+ </tr><!--
+ <tr>
+  <td id="composite-type"></td>
+ </tr>
+ <tr>
+  <td id="components" colspan="2"></td>
+ </tr>-->
+</table>
+</div>
+<input id="textbox" type="text" oninput="updateSuggestions(this.value);"></input>
+<div id="suggestions"></div>
+
+</body>
+
+<script>
+initSpells();
+initInfo();
+
+var updateSuggestions = function(text)
+{
+    document.getElementById("suggestions").innerHTML = "";
+    var suggestions = spellTree.search(text);
+    if (substring(suggestions.previous+suggestions.current, 0, text.length).toLowerCase() == text.toLowerCase())
+        suggestions = suggestions.suggest();
+    else
+        suggestions = ["Spell not found"];
+    for (var i = 0; i < suggestions.length; i++)
+    {
+        var spell = document.createElement("p");
+        spell.innerText = suggestions[i];
+        spell.classList.add("suggestion");
+        spell.addEventListener("click", function() {
+            document.getElementById("textbox").value = this.innerText;
+            updateSuggestions(this.innerText);
+        });
+        document.getElementById("suggestions").appendChild(spell);
+    }
+    updateInfo();
+};
+
+var updateInfo = function()
+{
+    var id = spellTree.search(document.getElementById("textbox").value).id;
+    if (id != undefined)
+    {
+        document.getElementById("spellname").innerText = spells[id].name;
+        document.getElementById("description").innerText = spells[id].desc;
+        for (var i = 0; i < 4; i++)
+            document.getElementById("stats"+i).innerText = STAT_NAMES_SHORT[i] + ": " + spells[id].statMods.getStatById(i);
+        document.getElementById("endur").innerText = "Endurance cost: " + spells[id].burden;
+        if (spells[id].turns == Infinity)
+            document.getElementById("turn-count").innerText = "Does not wear off naturally.";
+        else
+            document.getElementById("turn-count").innerText = "Lasts " + spells[id].turns + " turns.";
+        if (spells[id].stackable)
+            document.getElementById("stackable").innerText = "Stackable.";
+        else
+            document.getElementById("stackable").innerText = "Not stackable.";
+        document.getElementById("composite-type").innerText = spells[id].compositeType;
+        if (spells[id].components.length > 0)
+        {
+            document.getElementById("components").innerText = "Components: ";
+            for (var i = 0; i < spells[id].components.length; i++)
+            {
+                document.getElementById("components").innerText += " " + spells[spells[id].components[i]].name + " ";
+                if (i != spells[id].components.length-1)
+                    document.getElementById("components").innerText += ", ";
+            }
+        }
+        else
+            document.getElementById("components").innerText = "";
+    }
+};
+
+updateSuggestions("");
+
+</script>
+</html>

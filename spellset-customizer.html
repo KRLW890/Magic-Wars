@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Magic Wars Spellset Customizer</title>
+  <link rel="stylesheet" href="build-customizer/style.css">
+  <script src="build-customizer/Spell.js"></script>
+  <script src="src/Stats.js"></script>
+  <script src="src/spell-list.js"></script>
+  <script src="build-customizer/spellset-handler.js"></script>
+</head>
+<body>
+<div id="links"><a href="index.html" target="_blank">Play Magic Wars</a> | <a href="spell-guide.html" target="_blank">List of Spells</a> | <a href="https://discord.gg/7cbm2Ma" target="_blank">Join our Discord</a> | Spell Wars Alpha v1.0.0</div>
+
+<table id="all">
+<tr>
+ <td id="defaults">
+  <h3>Default sets:</h3>
+  <button id="spellset0" onclick="swapSpellset(0);" class="spellset-button">Hyper Offensive</button><br>
+  <button id="spellset1" onclick="swapSpellset(1);" class="spellset-button">Balanced</button><br>
+  <button id="spellset2" onclick="swapSpellset(2);" class="spellset-button">Stall</button><br>
+ </td>
+ 
+ <td>
+  <div id="customizer-main">
+   <h3>Customize your spellset</h3>
+   <input type="radio" name="player" onclick="changePlayer(0);" checked="checked">Player 1</input> <input type="radio" name="player" onclick="changePlayer(1);">Player 2 (local matches only)</input><br>
+   <table id="spellset-display">
+    <tr>
+     <td id="spell0" onclick="removeSpell(0);">Empty</td>
+     <td id="spell1" onclick="removeSpell(1);">Empty</td>
+     <td id="spell2" onclick="removeSpell(2);">Empty</td>
+     <td rowspan="2" class="spacer"><td>
+     <td rowspan="2">Composites available<br>with these spells:<br>
+      <div id="composites">None</div>
+     <td>
+    </tr>
+    <tr>
+     <td id="spell3" onclick="removeSpell(3);">Empty</td>
+     <td id="spell4" onclick="removeSpell(4);">Empty</td>
+     <td id="spell5" onclick="removeSpell(5);">Empty</td>
+    </tr>
+   </table><br>
+   <button onclick="save();">Save</button>
+  </div>
+  <table>
+   <tr>
+    <td><button class="addspell" onclick="addSpell(0);">Soften</button></td>
+    <td><button class="addspell" onclick="addSpell(1);">Erratic</button></td>
+    <td><button class="addspell" onclick="addSpell(2);">Blaze</button></td>
+    <td><button class="addspell" onclick="addSpell(3);">Sustain</button></td>
+    <td><button class="addspell" onclick="addSpell(4);">Health Boost</button></td>
+   </tr>
+   <tr>
+    <td><button class="addspell" onclick="addSpell(5);">Dexterity</button></td>
+    <td><button class="addspell" onclick="addSpell(6);">Fortify</button></td>
+    <td><button class="addspell" onclick="addSpell(8);">Lockdown</button></td>
+    <td><button class="addspell" onclick="addSpell(9);">Levitate</button></td>
+    <td><button class="addspell" onclick="addSpell(10);">Frost</button></td>
+   </tr>
+  </table>
+ </td>
+ 
+ <td id="custom-sets">
+  <h3>Custom sets:</h3>
+  <button id="spellset3" onclick="swapSpellset(3);" class="spellset-button">Custom 1</button><br>
+  <button id="spellset4" onclick="swapSpellset(4);" class="spellset-button">Custom 2</button><br>
+  <button id="spellset5" onclick="swapSpellset(5);" class="spellset-button">Custom 3</button><br>
+ </td>
+</tr>
+</table>
+
+</body>
+
+<script>
+initSpells();
+
+var builds = [
+    [2,10,5,9,1,3],
+    [1,2,3,8,0,4],
+    [8,4,3,6,1,0],
+    [],
+    [],
+    []
+];
+var selected = 0;
+var player = 0;
+//var customNames = ["Custom 1", "Custom 2", "Custom 3"];
+
+if (localStorage.getItem("MW_builds") == null)
+{
+    localStorage.setItem("MW_builds", JSON.stringify(builds));
+    localStorage.setItem("MW_P1build", "1");
+    localStorage.setItem("MW_P2build", "1");
+    //localStorage.setItem("MW_buildNames", JSON.stringify(customNames));
+}
+else
+{
+    builds = JSON.parse(localStorage.getItem("MW_builds"));
+    selected = JSON.parse(localStorage.getItem("MW_P1build"));
+    customNames = JSON.parse(localStorage.getItem("MW_buildNames"));
+}
+
+var save = function()
+{
+    localStorage.setItem("MW_builds", JSON.stringify(builds));
+    localStorage.setItem("MW_P"+(player+1)+"build", JSON.stringify(selected));
+};
+
+var swapSpellset = function(id)
+{
+    document.getElementById("spellset"+selected).classList.remove("selected");
+    document.getElementById("spellset"+id).classList.add("selected");
+    selected = id;
+    for (var i = 0; i < 6; i++)
+    {
+        if (builds[selected][i] != undefined)
+            document.getElementById("spell"+i).innerText = spells[builds[selected][i]].name;
+        else
+            document.getElementById("spell"+i).innerText = "Empty";
+    }
+    findAllComposites();
+};
+swapSpellset(selected);
+
+var changePlayer = function(id)
+{
+    document.getElementById("spellset"+selected).classList.remove("selected");
+    localStorage.setItem("MW_P"+(player+1)+"build", JSON.stringify(selected));
+    player = id;
+    selected = JSON.parse(localStorage.getItem("MW_P"+(player+1)+"build"));
+    swapSpellset(selected);
+};
+
+</script>
+</html>

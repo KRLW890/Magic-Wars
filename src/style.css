@@ -1,0 +1,232 @@
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    margin: 0px;
+}
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.playerspells {
+    padding: 10px;
+    background: rgb(200, 200, 200);
+    //border: 2px solid black;
+    width: 200px;
+    height: 260px;
+    vertical-align: top;
+}
+
+#spellbox0, #spellbox1 {
+    height: 260px;
+    overflow: auto;
+}
+
+#canvas {
+    height: 300px;
+    width: 500px;
+}
+
+#spelltable {/*
+    border-spacing: 0px;
+    padding: 0px;
+    margin: 0px;*/
+}
+
+#infobox, .statbox {
+    background: rgb(200, 200, 200);
+    //border: 2px solid black;
+    height: 47px;
+    vertical-align: top;
+}
+
+#infobox {
+    padding: 10px 20px 10px 20px;
+    width: 400px;
+    font-size: 1.1em;
+}
+
+.statbox {
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+    font-size: 1.1em;
+}
+.stattable {
+    margin: auto;
+}
+
+#weaponbox {
+    background: rgb(200, 200, 200);
+    //border: 2px solid black;
+    width: 150px;
+    padding: 10px;
+    vertical-align: top;
+    text-align: center;
+}
+
+.weaponbutton {
+    width: 150px;
+    height: 40px;
+    margin: 5px 0px 5px 0px;
+}
+
+.hidden {
+    display: none;
+}
+
+.focus {
+    border: 5px solid black;
+}
+
+.spacer {
+    width: 40px;
+}
+
+#spell0, #spell1, #spell2, #spell3, #spell4, #spell5 {
+    width: 110px;
+    height: 55px;
+}
+
+#runturn, #releasebutton, #tutorial, #play-local, #play-distant, #watch-replay-button {
+    font-size: 1.5em;
+    height: 50px;
+    width: 338px;
+}
+#runturn {
+    margin-top: 20px;
+}
+
+#actioninfo {
+    background: rgb(200, 200, 200);
+    //border: 2px solid black;
+    width: 200px;
+    padding: 10px;
+    vertical-align: top;
+    text-align: center;
+}
+
+.actionbutton {
+    height: 79px;
+    width: 110px;
+    border-radius: 5px;
+    margin: 2px;
+    font-size: 1.2em;
+    background: rgb(255, 255, 255);
+}
+
+.actionbutton:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.stagger {
+    background: rgb(170, 170, 170);
+}
+
+.weapon {
+    background: rgb(255, 70, 30);
+}
+
+.spell {
+    background: rgb(255, 215, 0);
+}
+
+.release {
+    background: rgb(150, 255, 255);
+}
+
+.selected {
+    font-weight: bold;
+    border: 5px outset black;
+}
+
+#action-intro {
+    margin-bottom: 5px;
+}
+
+#comp-intro {
+    margin: 7px;
+}
+
+#action-target {
+    margin-top: 5px;
+}
+
+#id0, #id1, #id2, #composite0, #composite1, #composite2 {
+    font-weight: bold;
+}
+
+#id0:hover, #id1:hover, #id2:hover {
+    color: red;
+    cursor: pointer
+}
+
+.castedSpell0
+{
+    color: rgb(193, 87, 0);
+    padding: 3px 15px 3px 15px;
+    margin: 5px;
+}
+
+.castedSpell1
+{
+    color: rgb(0, 50, 200);
+    padding: 3px 15px 3px 15px;
+    margin: 5px;
+}
+
+.castedSpell0:hover, .castedSpell1:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+#button-menu {
+    text-align: center;
+    vertical-align: top;
+    padding-top: 3px;
+}
+
+.header {
+    background: rgb(200, 200, 200);
+    padding: 1px 1px 8px 1px;
+    width: 400px;
+    text-align: center;
+}
+
+#player-turn {
+    font-size: 0.8em;
+}
+
+#text-speed {
+    text-align: center;
+    padding: 5px;
+}
+
+#tutorial, #play-local, #play-distant, #watch-replay-button, #view-replay, #dist-game-startup {
+    text-align: center;
+    width: 300px;
+    margin: 15px 50px 0px 50px;
+}
+
+#online-interface, #reload-memo
+{
+    text-align: center;
+    width: 350px;
+    margin: 15px 25px 0px 25px;
+}
+
+#resources {
+    text-align: center;
+    vertical-align: top;
+    font-size: 1.7em;
+}
+
+a {
+    font-size: 0.7em;
+}
+
+.footer {
+   text-align: right;
+   font-size: 0.7em;
+}
