@@ -10,8 +10,9 @@ var findAllComposites = function()
             if (compVal != -1)
             {
                 anything = true;
-                document.getElementById("composites").innerText += spells[compVal].name;
-                document.getElementById("composites").appendChild(document.createElement("br"));
+                var p = document.createElement("p");
+                p.innerText = spells[compVal].name;
+                document.getElementById("composites").appendChild(p);
             }
             for (var k = j+1; k < builds[selected].length; k++)
             {
@@ -19,8 +20,9 @@ var findAllComposites = function()
                 if (compVal != -1)
                 {
                     anything = true;
-                    document.getElementById("composites").innerText += spells[compVal].name;
-                    document.getElementById("composites").appendChild(document.createElement("br"));
+                    var p = document.createElement("p");
+                    p.innerText = spells[compVal].name;
+                    document.getElementById("composites").appendChild(p);
                 }
             }
         }
