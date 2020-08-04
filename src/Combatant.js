@@ -31,7 +31,8 @@ Combatant.prototype.damageHP = function(amount)
     if (this.currentHP < 0)
     {
         this.currentHP = 0;
-        victor = (this.id-1)*-1;
+        if (!tutorialRunning)
+            victor = (this.id-1)*-1;
     }
     else if (this.currentHP > this.maxHP)
         this.currentHP = this.maxHP;
