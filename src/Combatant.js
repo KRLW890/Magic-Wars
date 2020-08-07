@@ -28,7 +28,7 @@ var Combatant = function(name, stats, pos, id)
 Combatant.prototype.damageHP = function(amount)
 {
     this.currentHP -= Math.floor(amount);
-    if (this.currentHP < 0)
+    if (this.currentHP <= 0)
     {
         this.currentHP = 0;
         if (!tutorialRunning)
