@@ -11,6 +11,7 @@ function loadSprites() {
         lance: new Image(),
         musket: [new Image(), new Image()],
         grisnersWarhammer: new Image(),
+        sword: new Image(),
         diagram: new Image()
     };
     images.p_outline.src = "images/player-outline.png";
@@ -20,6 +21,7 @@ function loadSprites() {
     images.musket[0].src = "images/musket0.png";
     images.musket[1].src = "images/musket1.png";
     images.grisnersWarhammer.src = "images/grisners-warhammer.png";
+    images.sword.src = "images/ghost-sword.png";
     images.diagram.src = "images/composite-diagram.png";
     images.diagram.onload = function()
     {
@@ -51,3 +53,4 @@ function initAll()
     initSpells();
     initActions();
 };
+
