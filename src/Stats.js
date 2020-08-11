@@ -48,6 +48,28 @@ Stats.prototype.multiply = function(right)
     this.strd *= right.strd;
 };
 
+Stats.prototype.divideBy = function(right)
+{
+    this.atk /= right.atk;
+    this.skl /= right.skl;
+    this.def /= right.def;
+    this.strd /= right.strd;
+};
+
+Stats.prototype.greaterThanOrEqual = function(right)
+{
+    var output = true;
+    for (var i = 0; i < 4; i++)
+    {
+        if (this.getStatById(i) < right.getStatById(i))
+        {
+            output = false;
+            break;
+        }
+    }
+    return output;
+};
+
 Stats.prototype.floor = function()
 {
     this.atk = Math.floor(this.atk+0.00000000001);
