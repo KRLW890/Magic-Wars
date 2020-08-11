@@ -106,7 +106,7 @@ Combatant.prototype.maintainSpells = function(activeTurn, i, currTurn)
             for (var j = 0; j < this.emptySlots; j++)
                 this.activeSpells.pop();
             this.emptySlots = 0;
-            if (selected == 2 && nextMaintain != "spells")
+            if (selected == 2 && nextMaintain != "spells" && nextMaintain != "postendur")
                 nextMaintain = "endurance";
         }
         if (this.greenlight && animsActive == 0)
