@@ -15,8 +15,6 @@
   <script src="src/spell-list.js"></script>
   <script src="src/Action.js"></script>
   <script src="src/encrypt.js"></script>
-  <script src="src/tutorial.js"></script>
-  <script src="src/ai.js"></script>
   <link rel="stylesheet" href="src/blink.css">
 </head>
 <body>
@@ -71,14 +69,15 @@
   <h3 id="turn-counter">Magic Wars</h3>
   <div id="player-turn">By Lucia Holliday</div>
  </div>
- <div id="text-speed">
+ <div id="text-speed" class="hidden">
   Turn speed:<br>
   <input type="radio" name="text-speed" value="360" onclick="changeTextSpeed(360);"></input> Fast  
   <input type="radio" name="text-speed" value="540" onclick="changeTextSpeed(540);" checked="checked"></input> Medium 
   <input type="radio" name="text-speed" value="720" onclick="changeTextSpeed(720);"></input> Slow
  </div>
  <div id="standard-menu">
- <button id="tutorial" onclick="startTutorial();">Tutorial</button><br>
+ <button id="tutorial" onclick="loadTutorial();">Tutorial</button><br>
+ <button id="play-ai" onclick="showAiSetup();">Play against computer</button><br>
  <button id="play-local" onclick="setGame();">Play local match</button><br>
  <button id="play-distant" onclick="displayDistantGameSetup();">Play online match</button><br>
  <button id="watch-replay-button" onclick="replayAccess();">Watch a replay</button><br>
@@ -112,6 +111,14 @@
   <button onclick="copyToClipboard(document.getElementById('current-match-replay'));">Copy code</button>
  </div>
  
+ <div id="aistartup" class="hidden"><br>
+  Playing against the computer.<br>
+  Choose your difficulty:<br><br>
+  <button onclick="setAiGame(2.5);">Beginner</button><br><br>
+  <button onclick="setAiGame(1);">Intermediate</button><br><br>
+  <button onclick="setAiGame(0);">Expert</button><br><br><br><br>
+ </div>
+ 
  <div id="reload-memo" class="hidden"><br>Reload the page to play another match or watch another replay.</div>
  
  <button id="back-button" class="hidden" onclick="showDefaultMenu();">Back</button>
@@ -125,23 +132,26 @@
   <td class="spacer"></td>
   <td id="weaponbox">
    <h3>Weapons:</h3>
-   <button id="weapon0" class="weaponbutton hidden" onclick="actions[selected].weapon(0);">Rapier</button>
-   <button id="weapon1" class="weaponbutton hidden" onclick="actions[selected].weapon(1);">Lance</button>
-   <button id="weapon2" class="weaponbutton hidden" onclick="actions[selected].weapon(2);">Musket</button>
-   <button id="weapon3" class="weaponbutton hidden" onclick="actions[selected].weapon(3);">Grisner's Warhammer</button>
+   <div id="weaponlist">
+    <button id="weapon0" class="weaponbutton hidden" onclick="actions[selected].weapon(0);">Rapier</button>
+    <button id="weapon4" class="weaponbutton hidden" onclick="actions[selected].weapon(4);">Sword</button>
+    <button id="weapon1" class="weaponbutton hidden" onclick="actions[selected].weapon(1);">Lance</button>
+    <button id="weapon2" class="weaponbutton hidden" onclick="actions[selected].weapon(2);">Musket</button>
+    <button id="weapon3" class="weaponbutton hidden" onclick="actions[selected].weapon(3);">Grisner's Warhammer</button>
+   </div>
   </td>
   <td class="spacer"></td>
   <td>
     <table id="spelltable">
      <tr>
-      <td><button id="spell0" onclick="actions[selected].spell(this, players[turn].usableSpells[0]);">Empty</button></td>
-      <td><button id="spell1" onclick="actions[selected].spell(this, players[turn].usableSpells[1]);">Empty</button></td>
-      <td><button id="spell2" onclick="actions[selected].spell(this, players[turn].usableSpells[2]);">Empty</button></td>
+      <td><button id="spell0" onclick="actions[selected].spell(players[turn].usableSpells[0]);">Empty</button></td>
+      <td><button id="spell1" onclick="actions[selected].spell(players[turn].usableSpells[1]);">Empty</button></td>
+      <td><button id="spell2" onclick="actions[selected].spell(players[turn].usableSpells[2]);">Empty</button></td>
      </tr>
      <tr>
-      <td><button id="spell3" onclick="actions[selected].spell(this, players[turn].usableSpells[3]);">Empty</button></td>
-      <td><button id="spell4" onclick="actions[selected].spell(this, players[turn].usableSpells[4]);">Empty</button></td>
-      <td><button id="spell5" onclick="actions[selected].spell(this, players[turn].usableSpells[5]);">Empty</button></td>
+      <td><button id="spell3" onclick="actions[selected].spell(players[turn].usableSpells[3]);">Empty</button></td>
+      <td><button id="spell4" onclick="actions[selected].spell(players[turn].usableSpells[4]);">Empty</button></td>
+      <td><button id="spell5" onclick="actions[selected].spell(players[turn].usableSpells[5]);">Empty</button></td>
      </tr>
      <tr>
       <td colspan="3">
@@ -158,13 +168,13 @@
   <td id="actioninfo">
     <h3>Action Details:</h3>
     <div id="action-intro"></div>
-    <div id="id0" onclick="cancelSelection(0);"></div>
-    <div id="id1" onclick="cancelSelection(1);"></div>
-    <div id="id2" onclick="cancelSelection(2);"></div>
+    <div id="id0" onclick="cancelSelection(0);" onmouseover="generateInfo(actions[selected].id);"></div>
+    <div id="id1" onclick="cancelSelection(1);" onmouseover="generateSpellInfo(spells[actions[selected].id[1]]);"></div>
+    <div id="id2" onclick="cancelSelection(2);" onmouseover="generateSpellInfo(spells[actions[selected].id[2]]);"></div>
     <div id="comp-intro"></div>
-    <div id="composite0"></div>
-    <div id="composite1"></div>
-    <div id="composite2"></div>
+    <div id="composite0" onmouseover="generateSpellInfo(spells[actions[selected].compositeIds[0]]);"></div>
+    <div id="composite1" onmouseover="generateSpellInfo(spells[actions[selected].compositeIds[1]]);"></div>
+    <div id="composite2" onmouseover="generateSpellInfo(spells[actions[selected].compositeIds[2]]);"></div>
     <div id="action-target"></div>
   </td>
   <td>
@@ -177,23 +187,47 @@
 </td>
 
 <td colspan="2" id="resources">
- <div class="header"><h3 id="r-head-text">Resources</h3></div>
- <a id="spell-link" href="spell-guide.html" target="_blank">List of Spells</a><br>
- <a href="spellset-customizer.html" target="_blank">Customize Your Spellset</a><br>
- <a id="ptsurvey" href="https://forms.gle/qqq6Ki3gTrPaNNFs7" target="_blank">Play Tester Survey</a><br>
- <a id="discord" href="https://discord.gg/7cbm2Ma" target="_blank">Discord Server</a><br>
- <a href="https://forms.gle/Lp9gyhxRxuGnuLMR8" target="_blank">Error Report</a>
+ <div class="header"><button id="r-head-text" class="r-button r-selected" onclick="showLinks();">Resources</button><button id="r-info" class="r-button" onclick="showInfo();">Info</button></div>
+ <div id="resource-links">
+  <a id="spell-link" href="spell-guide.html" target="_blank">List of Spells</a><br>
+  <a href="spellset-customizer.html" target="_blank">Customize Your Spellset</a><br>
+  <a id="ptsurvey" href="https://forms.gle/qqq6Ki3gTrPaNNFs7" target="_blank">Play Tester Survey</a><br>
+  <a id="discord" href="https://discord.gg/7cbm2Ma" target="_blank">Discord Server</a><br>
+  <a href="https://forms.gle/Lp9gyhxRxuGnuLMR8" target="_blank">Error Report</a>
+ </div>
+ <div id="resource-info" class="hidden">
+  <div id="info-name"></div>
+  <div id="info-line0">To see information on a spell or weapon, click on it or hover over its name in the action details section.</div>
+  <div id="info-line1"></div>
+  <table id="info-statmods" class="hidden">
+   <tr>
+    <td colspan="2">Stat multipliers:</td>
+   </tr>
+   <tr>
+    <td id="info-stat0"></td>
+    <td id="info-stat1"></td>
+   </tr>
+   <tr>
+    <td id="info-stat2"></td>
+    <td id="info-stat3"></td>
+   </tr>
+  </table>
+  <div id="info-line2"></div>
+ </div>
 </td>
 
 </tr>
 <tr>
-<td colspan="2" class="footer">Magic Wars Alpha v1.0.0</td>
+<td colspan="2" class="footer">Magic Wars Alpha v1.1.0</td>
 </tr>
 </table>
 
 </body>
 
 <script>
+var tutorialRunning = false;
+var tutorialPhase = 0;
+var aiOpponent = -1;
 
 var hideStandard = function()
 {
@@ -207,6 +241,8 @@ var showDefaultMenu = function()
     document.getElementById("back-button").classList.add("hidden");
     document.getElementById("dist-game-startup").classList.add("hidden");
     document.getElementById("view-replay").classList.add("hidden");
+    document.getElementById("text-speed").classList.add("hidden");
+    document.getElementById("aistartup").classList.add("hidden");
     
 };
 
@@ -215,6 +251,25 @@ var replayAccess = function()
     hideStandard();
     document.getElementById("view-replay").classList.remove("hidden");
     document.getElementById("back-button").classList.remove("hidden");
+    document.getElementById("text-speed").classList.remove("hidden");
+};
+
+var addScript = function(file, onload) {
+    if (typeof onload !== "function") { onload = function() {}; }
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = file;
+    s.onload = onload;
+    document.body.appendChild(s);
+};
+
+var loadTutorial = function()
+{
+    hideStandard();
+    document.getElementById("text-speed").classList.remove("hidden");
+    document.getElementById("reload-memo").classList.remove("hidden");
+    document.getElementById("infobox").innerText = "Loading...";
+    addScript("src/tutorial.js", function() { addScript("src/tutorialAi.js", startTutorial); });
 };
 
 var copyToClipboard = function(elem)
@@ -226,20 +281,26 @@ var copyToClipboard = function(elem)
 var setGame = function()
 {
     hideStandard();
+    document.getElementById("text-speed").classList.remove("hidden");
+    document.getElementById("back-button").classList.add("hidden");
+    document.getElementById("reload-memo").classList.remove("hidden");
     if (localStorage.getItem("MW_builds") != null)
     {
         var builds = JSON.parse(localStorage.getItem("MW_builds"));
         if (onlineOpp != 0)
         {
             players[0].usableSpells = builds[JSON.parse(localStorage.getItem("MW_P1build"))];
-            players[1].usableSpells = builds[JSON.parse(localStorage.getItem("MW_P2build"))];
+            if (aiOpponent != -1)
+                players[1].usableSpells = [0, 1, 2, 3, 8, 10];
+            else
+                players[1].usableSpells = builds[JSON.parse(localStorage.getItem("MW_P2build"))];
         }
         else
             players[1].usableSpells = builds[JSON.parse(localStorage.getItem("MW_P1build"))];
     }
     actions[0].category = "empty";
     document.getElementById("runturn").addEventListener("click", runTurn);
-    for (var i = 0; i < 4; i++)
+    for (var i = 0; i < 5; i++)
         document.getElementById("weapon"+i).classList.remove("hidden");
     document.getElementById("replay-generator").classList.remove("hidden");
     currentTurn = 0;
@@ -262,6 +323,80 @@ var setDistantGame = function(p)
     document.getElementById("online-interface").classList.remove("hidden");
     onlineOpp = p;
     setGame();
+};
+
+var showAiSetup = function()
+{
+    hideStandard();
+    document.getElementById("aistartup").classList.remove("hidden");
+    document.getElementById("back-button").classList.remove("hidden");
+    
+};
+
+var setAiGame = function(difficulty)
+{
+    aiOpponent = difficulty;
+    document.getElementById("aistartup").classList.add("hidden");
+    addScript("src/ai.js", setGame);
+};
+
+var showLinks = function()
+{
+    document.getElementById("r-head-text").classList.add("r-selected");
+    document.getElementById("r-info").classList.remove("r-selected");
+    document.getElementById("resource-info").classList.add("hidden");
+    document.getElementById("resource-links").classList.remove("hidden");
+};
+
+var showInfo = function()
+{
+    document.getElementById("r-info").classList.add("r-selected");
+    document.getElementById("r-head-text").classList.remove("r-selected");
+    document.getElementById("resource-links").classList.add("hidden");
+    document.getElementById("resource-info").classList.remove("hidden");
+};
+
+var generateWeaponInfo = function(obj)
+{
+    document.getElementById("info-name").innerText = obj.name;
+    document.getElementById("info-line0").innerText = "Base damage: " + obj.baseDamage;
+    document.getElementById("info-line1").innerText = "Primary offensive stat: " + STAT_NAMES_SHORT[obj.atk];
+    document.getElementById("info-line2").innerText = "Primary defensive stat: " + STAT_NAMES_SHORT[obj.def];
+    document.getElementById("info-statmods").classList.add("hidden");
+};
+
+var generateSpellInfo = function(obj)
+{
+    if (obj != undefined)
+    {
+        document.getElementById("info-name").innerText = obj.name;
+        document.getElementById("info-line0").innerText = "Endurance cost: " + obj.burden;
+        if (obj.turns != Infinity)
+            document.getElementById("info-line1").innerText = "Lasts " + obj.turns + " turns.";
+        else
+            document.getElementById("info-line1").innerText = "Does not wear off naturally.";
+        document.getElementById("info-statmods").classList.remove("hidden");
+        for (var i = 0; i < 4; i++)
+            document.getElementById("info-stat"+i).innerText = STAT_NAMES_SHORT[i] + ": " + obj.statMods.getStatById(i);
+        document.getElementById("info-line2").innerText = "Extra effects: " + obj.desc;
+    }
+};
+
+var generateCastedSpellInfo = function(obj)
+{
+    generateSpellInfo(spells[obj.id]);
+    for (var i = 0; i < 4; i++)
+        document.getElementById("info-stat"+i).innerText = STAT_NAMES_SHORT[i] + ": " + (Math.floor(obj.statMods.getStatById(i)*100+0.00000000001)/100);
+};
+
+var generateInfo = function()
+{
+    if (actions[selected].category == "weapon")
+        generateWeaponInfo(weapons[actions[selected].id]);
+    else if (actions[selected].category == "spell")
+        generateSpellInfo(spells[actions[selected].id[0]]);
+    else if (actions[selected].category == "release" && !turnIsRunning)
+        generateCastedSpellInfo(players[actions[selected].target].activeSpells[actions[selected].id]);
 };
 
 </script>
