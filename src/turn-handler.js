@@ -28,6 +28,9 @@ var setTurn = function()
     else if (tutorialPhase == 31)
         turn = (turn-1)*-1;
     
+    if (!replaying)
+        spells[1].setRandomAtTurnStart();
+    
     if (onlineOpp == turn)
         document.getElementById("infobox").innerText = "Waiting for opponent.";
     else
@@ -81,7 +84,19 @@ var setTurn = function()
     }
     if (replaying)
         setTimeout(runTurn, 100);
-    if (tutorialRunning && tutorialPhase != 31)
+    if (aiOpponent >= 0 && turn == 1)
+    {
+        actionSelect(0);
+        var lastHP;
+        if (proj.length == 2)
+            lastHP = proj[0].lastHP;
+        proj = [new Projection(players[turn], lastHP), new Projection(players[(turn-1)*-1])];
+        releasedOppSpell = false;
+        spellCasted = false;
+        aiSelection();
+        runTurn();
+    }
+    else if (tutorialRunning && tutorialPhase != 31)
         continueTutorial();
     else if (tutorialRunning && turn == 1)
     {
