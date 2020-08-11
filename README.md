@@ -1,6 +1,8 @@
 # Magic Wars
 A early alpha, turn-based battle system centered around magic as buffs and debuffs.
 
+<hr>
+
 # Version 1.1.0 is here!
 And with it, many changes:
 
