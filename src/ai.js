@@ -219,7 +219,7 @@ var aiSelection = function()
         {
             var highestStrd = 0;
             for (var i = 1; i < players[proj[1].id].activeSpells.length; i++)
-                if (spells[players[proj[1].id].activeSpells[i].id].burden > spells[players[proj[1].id].activeSpells[highestEndur].id].burden)
+                if (spells[players[proj[1].id].activeSpells[i].id].statMods.strd > spells[players[proj[1].id].activeSpells[highestStrd].id].statMods.strd)
                     highestStrd = i;
             actions[selected].release();
             actions[selected].target = proj[1].id;
