@@ -2,7 +2,7 @@ var selected = 0;
 
 var actionSelect = function(id)
 {
-    if (id != selected && (!tutorialRunning || turnIsRunning)) //(!tutorialRunning || tutorialPhase == 3 || tutorialPhase == 10 || tutorialPhase == 23 || tutorialPhase == 26 || tutorialPhase == 30))
+    if (id != selected && (!tutorialRunning || turnIsRunning))
     {
         if (!tutorialRunning)
         {
@@ -11,6 +11,7 @@ var actionSelect = function(id)
         }
         selected = id;
         updateDetails();
+        document.getElementById("infobox").innerText = "";
     }
 };
 
@@ -33,7 +34,9 @@ var updateDetails = function()
         document.getElementById("action-intro").innerText = "Empty.";
     break;
     case "weapon":
-        document.getElementById("action-intro").innerText = "Attacking with the";
+        document.getElementById("action-intro").innerText = "Attacking with ";
+        if (actions[selected].id != 3)
+            document.getElementById("action-intro").innerText += " the";
         document.getElementById("id0").innerText = weapons[actions[selected].id].name + ".";
     break;
     case "spell":
@@ -82,6 +85,9 @@ var Action = function(num)
 
 Action.prototype.weapon = function(id)
 {
+    showInfo();
+    generateWeaponInfo(weapons[id]);
+    
     if (this.category != "stagger" && this.category != "turn1" && this.category != "not playing" && !turnIsRunning && (!tutorialRunning || tutorialPhase == 2 || tutorialPhase == 31))
     {
         if (this.category != "weapon")
@@ -102,10 +108,25 @@ Action.prototype.weapon = function(id)
         }
         this.id = id;
         document.getElementById("infobox").innerText = "";
-        if (selected != 2 && !tutorialRunning)
+        if (selected != 2 && currentTurn != 1 && !tutorialRunning && players[turn].modStats.greaterThanOrEqual(weapons[id].statReqs) && (aiOpponent == -1 || turn == 0))
             actionSelect(selected+1);
         else
+        {
             updateDetails();
+            if (!players[turn].modStats.greaterThanOrEqual(weapons[id].statReqs))
+            {
+                document.getElementById("infobox").innerText = "This action will fail if you do not have at least ";
+                for (var i = 0; i < 4; i++)
+                {
+                    if (players[turn].modStats.getStatById(i) < weapons[id].statReqs.getStatById(i))
+                    {
+                        document.getElementById("infobox").innerText += " " + weapons[id].statReqs.getStatById(i) + " " + STAT_NAMES_FULL[i] + " ";
+                        break;
+                    }
+                }
+                document.getElementById("infobox").innerText += " when you attack.";
+            }
+        }
     }
 };
 
@@ -140,9 +161,15 @@ Action.prototype.findComposites = function()
     }
 };
 
-Action.prototype.spell = function(spell, id)
+Action.prototype.spell = function(id)
 {
-    if (this.category != "stagger" && this.category != "turn1" && this.category != "not playing" && id != undefined && spells[id].used != true && !turnIsRunning)
+    if (currentTurn != 0 && id != undefined)
+    {
+        showInfo();
+        generateSpellInfo(spells[id]);
+    }
+    
+    if (this.category != "stagger" && this.category != "turn1" && this.category != "not playing" && id != undefined && spells[id].used != true && !turnIsRunning && id != undefined)
     {
         if (this.category != "spell")
         {
@@ -249,8 +276,32 @@ Action.prototype.run = function()
         players[turn].animations.stagger();
     break;
     case "weapon":
-        document.getElementById("infobox").innerText = players[turn].name + " attacked with the " + weapons[this.id].name + "!";
-        weapons[this.id].attack(turn);
+        if (players[turn].modStats.greaterThanOrEqual(weapons[this.id].statReqs))
+        {
+            document.getElementById("infobox").innerText = players[turn].name + " attacked with ";
+            if (this.id != 3)
+                document.getElementById("infobox").innerText += " the ";
+            document.getElementById("infobox").innerText += " " + weapons[this.id].name + "!";
+            weapons[this.id].attack(turn);
+        }
+        else
+        {
+            players[turn].animations.stagger();
+            document.getElementById("infobox").innerText = players[turn].name + " does not have enough ";
+            for (var i = 0; i < 4; i++)
+            {
+                if (players[turn].modStats.getStatById(i) < weapons[this.id].statReqs.getStatById(i))
+                {
+                    document.getElementById("infobox").innerText += " " + STAT_NAMES_FULL[i] + " ";
+                    break;
+                }
+            }
+            document.getElementById("infobox").innerText += " to wield ";
+            if (this.id != 3)
+                document.getElementById("infobox").innerText += " the ";
+            document.getElementById("infobox").innerText += " " + weapons[this.id].name + "!";
+            
+        }
     break;
     case "spell":
         document.getElementById("infobox").innerText = players[turn].name + " cast ";
