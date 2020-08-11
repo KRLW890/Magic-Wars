@@ -5,7 +5,7 @@ var base64 = {
 for (var i = 0; i < base64.byId.length; i++)
     base64.byChar[base64.byId[i]] = i;
 
-var replayCode = "0";
+var replayCode = "1";
 var replaying = false;
 
 var convertTo64 = function(val)
@@ -51,7 +51,8 @@ var encryptAction = function(action)
             else
             {
                 output += action.id[i];
-                output += spells[action.id[i]].onEncrypt()*2*Math.pow(21, i+1);
+                if (action.id[i] == 1)
+                    output += spells[1].outcome*2*Math.pow(21, i+1);
             }
         }
     }
@@ -130,8 +131,8 @@ var decryptAction = function(val, destination)
     }
     destination.target = val%2;
     val = Math.floor(val/2);
-    if (destination.category == "spell" && val%16 != 0)
-        spells[1].outcome = val%16;
+    if (destination.category == "spell" && val%16 != 0){
+        spells[1].outcome = val%16;console.log(val);}
 };
 
 var printReplay = function()
@@ -155,6 +156,13 @@ var replayGame = function(code)
         players[i].updateStats();
     }
     replaying = true;
+    if (replayCode[0] == "0")
+    {
+        weapons[0].baseDamage = 10;
+        weapons[2].statReqs = new Stats(0);
+        weapons[3].baseDamage = 20;
+        weapons[3].statReqs = new Stats(0);
+    }
     replayCode = substring(code, 1, code.length-1);
     runTurn();
 };
