@@ -1,5 +1,3 @@
-var tutorialRunning = false;
-var tutorialPhase = 0;
 var continuePhases = true;
 var targetForTutorial;
 
@@ -137,7 +135,6 @@ var continueTutorial = function()
             document.getElementById("stats"+targetForTutorial+""+0).classList.add("blink");
             document.getElementById("stats"+targetForTutorial+""+1).classList.add("blink");
             document.getElementById("infobox").innerText = "Attack (Atk) and Skill (Skl) are the offensive stats.";
-            tutorialPhase++;
         break;
         case 14:
             document.getElementById("infobox").innerText = "Different weapons will favor one over the other, but many weapons still use both for damage calculation.";
@@ -148,7 +145,6 @@ var continueTutorial = function()
             document.getElementById("stats"+targetForTutorial+""+2).classList.add("blink");
             document.getElementById("stats"+targetForTutorial+""+3).classList.add("blink");
             document.getElementById("infobox").innerText = "Defense (Def) and Sturdiness (Strd) are the defensive stats.";
-            tutorialPhase++;
         break;
         case 16:
             document.getElementById("infobox").innerText = "Once again, different weapons will target one more than the other, but many weapons still use both.";
