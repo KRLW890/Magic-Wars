@@ -13,12 +13,13 @@ var spellTickDown = function(spell)
     return true;
 };
 
-var Spell = function(name, id, turns, burden, statMods, stackable) {
+var Spell = function(name, id, turns, burden, statMods, desc, stackable) {
     this.name = name;
     this.id = id;
     this.turns = turns;
     this.burden = burden;
     this.statMods = statMods;
+    this.desc = desc || "None.";
     this.stackable = stackable || false;
     this.used = false;
     this.outcome = 0;
@@ -26,7 +27,7 @@ var Spell = function(name, id, turns, burden, statMods, stackable) {
     this.onTurnChange = spellTickDown;
     this.onRelease = function() {};
     this.onHpUpdate = function() {};
-    this.onEncrypt = function() { return 0; };
+    this.infoType = "spell";
 };
 
 Spell.prototype.cast = function(user, target, offset)
@@ -60,8 +61,9 @@ var CastedSpell = function(id, caster, target)
     this.placeId = players[target].activeSpells.length;
     this.caster = caster;
     this.target = target;
-    this.statMods = spells[id].statMods;
+    this.statMods = new Stats(spells[id].statMods);
     this.turns = spells[id].turns;
+    this.infoType = "castedspell";
     this.element = document.createElement("p");
     this.updateElement = function()
     {
@@ -72,6 +74,9 @@ var CastedSpell = function(id, caster, target)
     this.updateElement();
     var pointer = this;
     this.element.addEventListener("click", function() {
+        showInfo();
+        generateCastedSpellInfo(pointer);
+        
         if (actions[selected].category == "release" && !turnIsRunning)
         {
             var allowed = true;
@@ -98,10 +103,11 @@ var CastedSpell = function(id, caster, target)
                 actions[selected].target = pointer.target;
                 actions[selected].id = pointer.placeId;
                 document.getElementById("infobox").innerText = "";
-                if (selected != 2 && !tutorialRunning)
+                if (selected != 2 && !tutorialRunning && (!players[pointer.target].lockdown || pointer.id == 8))
                     actionSelect(selected+1);
-                else
-                    updateDetails();
+                else if (players[pointer.target].lockdown && pointer.id != 8)
+                    document.getElementById("infobox").innerText = "This action will fail if Lockdown is not released first.";
+                updateDetails();
                 if (tutorialRunning && (tutorialPhase == 25))
                 {
                     document.getElementById("releasebutton").classList.remove("blink");
