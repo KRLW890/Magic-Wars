@@ -67,7 +67,7 @@ PlayerAnimations.prototype.damage = function()
 
 PlayerAnimations.prototype.stagger = function()
 {
-    if (this.playing.damage)
+    if (!this.playing.damage)
     {
         animsActive++;
         this.xMomentum = -3;
