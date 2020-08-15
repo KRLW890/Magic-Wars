@@ -1,6 +1,6 @@
 var spellTree = new Root();
 
-var Spell = function(name, id, turns, burden, statMods, stackable) {
+var Spell = function(name, id, turns, burden, statMods, desc, stackable) {
     this.name = name;
     this.id = id;
     this.turns = turns;
